@@ -62,6 +62,8 @@ def collect_env_vars(work_dir):
         vars.update({'HTTPS_PROXY': os.environ['HTTPS_PROXY']})
     if 'NO_PROXY' in os.environ:
         vars.update({'NO_PROXY': os.environ['NO_PROXY']})
+    if 'PIP_EXTRA_INDEX_URL' in os.environ:
+        vars.update({'PIP_EXTRA_INDEX_URL': os.environ['PIP_EXTRA_INDEX_URL']})
     return vars
 
 

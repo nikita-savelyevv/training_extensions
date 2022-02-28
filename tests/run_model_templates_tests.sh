@@ -8,6 +8,7 @@ echo ""
 echo ""
 
 export PYTHONPATH=${PYTHONPATH}:`pwd`
+export PIP_EXTRA_INDEX_URL=https://test.pypi.org/simple/
 pytest tests/ote_cli/ -v --durations=0 || exit 1
 deactivate
 echo ""
