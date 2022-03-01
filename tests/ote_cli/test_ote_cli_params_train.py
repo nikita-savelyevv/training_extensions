@@ -50,6 +50,9 @@ ote_dir = os.getcwd()
 templates = Registry('external').templates
 templates_ids = [template.model_template_id for template in templates]
 
+detection_templates = templates.filter(task_type='DETECTION')
+detection_templates_ids = [template.model_template_id for template in detection_templates]
+
 
 class TestOTECliTrainParams:
     @e2e_pytest_component
@@ -225,4 +228,18 @@ class TestOTECliTrainParams:
                         '--hpo-time-ratio',
                         '-1']
         ret = ote_train_common(template, root, command_line)
+        assert error_string in str(ret.stderr)
+
+
+class OTECliTrainParamsDetection:
+    @e2e_pytest_component
+    def test_create_venv(self):
+        work_dir, template_work_dir, algo_backend_dir = get_some_vars(detection_templates[0], root)
+        create_venv(algo_backend_dir, work_dir, template_work_dir)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_deploy_no_template(self, template):
+        error_string = "ote train: error: the following arguments are required: template"
+        ret = ote_train_common(template, [])
         assert error_string in str(ret.stderr)
