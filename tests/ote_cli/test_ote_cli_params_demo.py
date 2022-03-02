@@ -31,7 +31,7 @@ from common import (
     ote_eval_deployment_testing,
     ote_eval_openvino_testing,
     ote_eval_testing,
-    ote_train_testing,
+    ote_demo_testing,
     ote_export_testing,
     pot_optimize_testing,
     pot_eval_testing,
@@ -208,7 +208,7 @@ class TestOTECliDemoParamsDetection:
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
-    def test_ote_train_pp_result_based_confidence_threshold(self, template):
+    def test_ote_demo_pp_result_based_confidence_threshold(self, template):
         error_string = "Boolean value expected"
         command_args = [template.model_template_id,
                         '--load-weights',
@@ -223,7 +223,7 @@ class TestOTECliDemoParamsDetection:
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
-    def test_ote_train_pp_result_based_confidence_threshold_positive_case(self, template):
+    def test_ote_demo_pp_result_based_confidence_threshold_positive_case(self, template):
         command_args = [template.model_template_id,
                         '--load-weights',
                         './trained_default_template/weights.pth',
