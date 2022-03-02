@@ -263,6 +263,25 @@ class TestOTECliTrainParamsDetection:
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_batch_size_positive_case(self, template):
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.batch_size', '1']
+        ret = ote_train_common(template, root, command_args)
+        assert ret.returncode == 0
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
     def test_ote_train_lp_batch_size_oob(self, template):
         error_string = "is out of bounds."
         command_args = [template.model_template_id,
@@ -308,6 +327,25 @@ class TestOTECliTrainParamsDetection:
             temp.append(case)
             ret = ote_train_common(template, root, temp)
             assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_learning_rate_positive_case(self, template):
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.learning_rate', '0.01']
+        ret = ote_train_common(template, root, command_args)
+        assert ret.returncode == 0
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
@@ -359,6 +397,25 @@ class TestOTECliTrainParamsDetection:
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_learning_rate_warmup_iters_positive_case(self, template):
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.learning_rate_warmup_iters', '1']
+        ret = ote_train_common(template, root, command_args)
+        assert ret.returncode == 0
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
     def test_ote_train_lp_lr_warmup_iters_oob(self, template):
         error_string = "is out of bounds."
         command_args = [template.model_template_id,
@@ -402,6 +459,25 @@ class TestOTECliTrainParamsDetection:
             temp.append(case)
             ret = ote_train_common(template, root, temp)
             assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_num_iters_positive_case(self, template):
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.num_iters', '1']
+        ret = ote_train_common(template, root, command_args)
+        assert ret.returncode == 0
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
@@ -453,6 +529,25 @@ class TestOTECliTrainParamsDetection:
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_confidence_threshold_positive_case(self, template):
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.confidence_threshold', '0,5']
+        ret = ote_train_common(template, root, command_args)
+        assert ret.returncode == 0
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
     def test_ote_train_pp_confidence_threshold_oob(self, template):
         error_string = "is out of bounds."
         command_args = [template.model_template_id,
@@ -496,6 +591,26 @@ class TestOTECliTrainParamsDetection:
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_result_based_confidence_threshold_positive_case(self, template):
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.result_based_confidence_threshold',
+                        'False']
+        ret = ote_train_common(template, root, command_args)
+        assert ret.returncode == 0
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
     def test_ote_train_nncf_opt_enable_quantization(self, template):
         error_string = "Boolean value expected"
         command_args = [template.model_template_id,
@@ -517,6 +632,46 @@ class TestOTECliTrainParamsDetection:
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_result_based_confidence_threshold_positive_case(self, template):
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.result_based_confidence_threshold',
+                        'False']
+        ret = ote_train_common(template, root, command_args)
+        assert ret.returncode == 0
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_enable_quantization_positive_case(self, template):
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.enable_quantization',
+                        'False']
+        ret = ote_train_common(template, root, command_args)
+        assert ret.returncode == 0
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
     def test_ote_train_nncf_opt_enable_pruning(self, template):
         error_string = "Boolean value expected"
         command_args = [template.model_template_id,
@@ -535,6 +690,26 @@ class TestOTECliTrainParamsDetection:
                         'NonBoolean']
         ret = ote_train_common(template, root, command_args)
         assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_enable_pruning_positive_case(self, template):
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.enable_pruning',
+                        'False']
+        ret = ote_train_common(template, root, command_args)
+        assert ret.returncode == 0
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
