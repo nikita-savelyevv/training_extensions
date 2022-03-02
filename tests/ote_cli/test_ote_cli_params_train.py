@@ -231,7 +231,7 @@ class TestOTECliTrainParams:
         assert error_string in str(ret.stderr)
 
 
-class OTECliTrainParamsDetection:
+class TestOTECliTrainParamsDetection:
     @e2e_pytest_component
     def test_create_venv(self):
         work_dir, template_work_dir, algo_backend_dir = get_some_vars(detection_templates[0], root)
@@ -240,7 +240,7 @@ class OTECliTrainParamsDetection:
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
     def test_ote_train_lp_batch_size_type(self, template):
-        error_string = "--learning_parameters.batch_size: invalid int value:"
+        error_string = "invalid int value"
         command_args = [template.model_template_id,
                         '--train-ann-file',
                         f'{os.path.join(ote_dir, args["--train-ann-file"])}',
@@ -258,12 +258,13 @@ class OTECliTrainParamsDetection:
         for case in cases:
             temp = deepcopy(command_args)
             temp.append(case)
-            ret = ote_train_common(template, temp)
+            ret = ote_train_common(template, root, temp)
             assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
     def test_ote_train_lp_batch_size_oob(self, template):
+        error_string = "is out of bounds."
         command_args = [template.model_template_id,
                         '--train-ann-file',
                         f'{os.path.join(ote_dir, args["--train-ann-file"])}',
@@ -279,8 +280,79 @@ class OTECliTrainParamsDetection:
                         '--learning_parameters.batch_size']
         cases = ["0", "513"]
         for case in cases:
-            error_string = f"ValueError: Invalid value set for batch_size: {case} is out of bounds."
             temp = deepcopy(command_args)
             temp.append(case)
-            ret = ote_train_common(template, temp)
+            ret = ote_train_common(template, root, temp)
+            assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_learning_rate_type(self, template):
+        error_string = "invalid float value"
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.learning_rate']
+        cases = ["-1", "Alpha"]
+        for case in cases:
+            temp = deepcopy(command_args)
+            temp.append(case)
+            ret = ote_train_common(template, root, temp)
+            assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_learning_rate_oob(self, template):
+        error_string = "is out of bounds."
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.learning_rate']
+        cases = ["0.0", "0.2"]
+        for case in cases:
+            temp = deepcopy(command_args)
+            temp.append(case)
+            ret = ote_train_common(template, root, temp)
+            assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_batch_size_type(self, template):
+        error_string = "invalid int value"
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.batch_size']
+        cases = ["1.0", "-1", "Alpha"]
+        for case in cases:
+            temp = deepcopy(command_args)
+            temp.append(case)
+            ret = ote_train_common(template, root, temp)
             assert error_string in str(ret.stderr)
