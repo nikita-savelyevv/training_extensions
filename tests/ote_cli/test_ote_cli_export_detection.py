@@ -24,14 +24,14 @@ from ote_cli.registry import Registry
 from common import (
     create_venv,
     get_some_vars,
-    ote_demo_deployment_testing,
-    ote_demo_testing,
-    ote_demo_openvino_testing,
+    ote_export_deployment_testing,
+    ote_export_testing,
+    ote_export_openvino_testing,
     ote_deploy_openvino_testing,
     ote_eval_deployment_testing,
     ote_eval_openvino_testing,
     ote_eval_testing,
-    ote_train_testing,
+    ote_export_testing,
     ote_export_testing,
     pot_optimize_testing,
     pot_eval_testing,
@@ -49,6 +49,9 @@ ote_dir = os.getcwd()
 
 templates = Registry('external').filter(task_type='DETECTION').templates
 templates_ids = [template.model_template_id for template in templates]
+
+detection_templates = templates.filter(task_type='DETECTION')
+detection_templates_ids = [template.model_template_id for template in detection_templates]
 
 
 class TestExportCommonDetection:
@@ -100,3 +103,87 @@ class TestExportCommonDetection:
                 temp[i] = case
                 ret = ote_export_common(template, root, command_line)
                 assert error_string in str(ret.stderr)
+
+
+class TestOTECliDemoParamsDetection:
+    @e2e_pytest_component
+    def test_create_venv(self):
+        work_dir, template_work_dir, algo_backend_dir = get_some_vars(detection_templates[0], root)
+        create_venv(algo_backend_dir, work_dir, template_work_dir)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_export_pp_confidence_threshold_type(self, template):
+        error_string = "invalid float value"
+        command_args = [template.model_template_id,
+                        '--load-weights',
+                        './trained_default_template/weights.pth',
+                        f'--save-model-to',
+                        f'./exported_{template.model_template_id}',
+                        'params',
+                        '--postprocessing.confidence_threshold'
+                        ]
+        cases = ["-1", "Alpha"]
+        for case in cases:
+            temp = deepcopy(command_args)
+            temp.append(case)
+            ret = ote_export_common(template, root, temp)
+            assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_export_pp_confidence_threshold_oob(self, template):
+        error_string = "is out of bounds."
+        command_args = [template.model_template_id,
+                        '--load-weights',
+                        './trained_default_template/weights.pth',
+                        f'--save-model-to',
+                        f'./exported_{template.model_template_id}',
+                        'params',
+                        '--postprocessing.confidence_threshold', '1.1'
+                        ]
+        ret = ote_export_common(template, root, command_args)
+        assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_export_pp_confidence_threshold_positive_case(self, template):
+        command_args = [template.model_template_id,
+                        '--load-weights',
+                        './trained_default_template/weights.pth',
+                        f'--save-model-to',
+                        f'./exported_{template.model_template_id}',
+                        'params',
+                        '--postprocessing.confidence_threshold', '0.5'
+                        ]
+        ret = ote_export_common(template, root, command_args)
+        assert ret.returncode == 0
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_export_pp_result_based_confidence_threshold(self, template):
+        error_string = "Boolean value expected"
+        command_args = [template.model_template_id,
+                        '--load-weights',
+                        './trained_default_template/weights.pth',
+                        f'--save-model-to',
+                        f'./exported_{template.model_template_id}',
+                        'params',
+                        '--postprocessing.result_based_confidence_threshold', 'NonBoolean'
+                        ]
+        ret = ote_export_common(template, root, command_args)
+        assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_export_pp_result_based_confidence_threshold_positive_case(self, template):
+        command_args = [template.model_template_id,
+                        '--load-weights',
+                        './trained_default_template/weights.pth',
+                        f'--save-model-to',
+                        f'./exported_{template.model_template_id}',
+                        'params',
+                        '--postprocessing.result_based_confidence_threshold', 'False'
+                        ]
+        ret = ote_export_common(template, root, command_args)
+        assert ret.returncode == 0
