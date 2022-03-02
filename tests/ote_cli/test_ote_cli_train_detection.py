@@ -335,7 +335,7 @@ class TestOTECliTrainParamsDetection:
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
-    def test_ote_train_lp_batch_size_type(self, template):
+    def test_ote_train_lp_lr_warmup_iters_type(self, template):
         error_string = "invalid int value"
         command_args = [template.model_template_id,
                         '--train-ann-file',
@@ -349,10 +349,277 @@ class TestOTECliTrainParamsDetection:
                         '--save-model-to',
                         f'./trained_{template.model_template_id}',
                         'params',
-                        '--learning_parameters.batch_size']
+                        '--learning_parameters.learning_rate_warmup_iters']
         cases = ["1.0", "-1", "Alpha"]
         for case in cases:
             temp = deepcopy(command_args)
             temp.append(case)
             ret = ote_train_common(template, root, temp)
             assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_lr_warmup_iters_oob(self, template):
+        error_string = "is out of bounds."
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--learning_parameters.learning_rate_warmup_iters',
+                        '10001'
+                        ]
+        ret = ote_train_common(template, root, command_args)
+        assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_num_iters_type(self, template):
+        error_string = "invalid int value"
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '  --learning_parameters.num_iters']
+        cases = ["1.0", "-1", "Alpha"]
+        for case in cases:
+            temp = deepcopy(command_args)
+            temp.append(case)
+            ret = ote_train_common(template, root, temp)
+            assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_lp_num_iters_oob(self, template):
+        error_string = "is out of bounds."
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '  --learning_parameters.num_iters']
+        cases = ["0", "10001"]
+        for case in cases:
+            temp = deepcopy(command_args)
+            temp.append(case)
+            ret = ote_train_common(template, root, temp)
+            assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_pp_confidence_threshold_type(self, template):
+        error_string = "invalid float value"
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--postprocessing.confidence_threshold']
+        cases = ["-1", "Alpha"]
+        for case in cases:
+            temp = deepcopy(command_args)
+            temp.append(case)
+            ret = ote_train_common(template, root, temp)
+            assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_pp_confidence_threshold_oob(self, template):
+        error_string = "is out of bounds."
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--postprocessing.confidence_threshold',
+                        '1.1'
+                        ]
+        ret = ote_train_common(template, root, command_args)
+        assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_pp_result_based_confidence_threshold(self, template):
+        error_string = "Boolean value expected"
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--postprocessing.result_based_confidence_threshold'
+                        'NonBoolean']
+        ret = ote_train_common(template, root, command_args)
+        assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_nncf_opt_enable_quantization(self, template):
+        error_string = "Boolean value expected"
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--nncf_optimization.enable_quantization'
+                        'NonBoolean']
+        ret = ote_train_common(template, root, command_args)
+        assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_nncf_opt_enable_pruning(self, template):
+        error_string = "Boolean value expected"
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--nncf_optimization.enable_pruning'
+                        'NonBoolean']
+        ret = ote_train_common(template, root, command_args)
+        assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_nncf_opt_maximal_accuracy_degradation_type(self, template):
+        error_string = "invalid float value"
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--nncf_optimization.maximal_accuracy_degradation']
+        cases = ["-1", "Alpha"]
+        for case in cases:
+            temp = deepcopy(command_args)
+            temp.append(case)
+            ret = ote_train_common(template, root, temp)
+            assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_nncf_opt_maximal_accuracy_degradation_oob(self, template):
+        error_string = "is out of bounds"
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--nncf_optimization.maximal_accuracy_degradation', '100.1']
+        ret = ote_train_common(template, root, command_args)
+        assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_pp_maximal_confidence_threshold_type(self, template):
+        error_string = "invalid float value"
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--postprocessing.confidence_threshold']
+        cases = ["-1", "Alpha"]
+        for case in cases:
+            temp = deepcopy(command_args)
+            temp.append(case)
+            ret = ote_train_common(template, root, temp)
+            assert error_string in str(ret.stderr)
+
+    @e2e_pytest_component
+    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    def test_ote_train_pp_maximal_confidence_threshold_oob(self, template):
+        error_string = "is out of bounds"
+        command_args = [template.model_template_id,
+                        '--train-ann-file',
+                        f'{os.path.join(ote_dir, args["--train-ann-file"])}',
+                        '--train-data-roots',
+                        f'{os.path.join(ote_dir, args["--train-data-roots"])}',
+                        '--val-ann-file',
+                        f'{os.path.join(ote_dir, args["--val-ann-file"])}',
+                        '--val-data-roots',
+                        f'{os.path.join(ote_dir, args["--val-data-roots"])}',
+                        '--save-model-to',
+                        f'./trained_{template.model_template_id}',
+                        'params',
+                        '--postprocessing.confidence_threshold', '100.1']
+        ret = ote_train_common(template, root, command_args)
+        assert error_string in str(ret.stderr)
