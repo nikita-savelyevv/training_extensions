@@ -50,9 +50,6 @@ ote_dir = os.getcwd()
 templates = Registry('external').filter(task_type='DETECTION').templates
 templates_ids = [template.model_template_id for template in templates]
 
-detection_templates = templates.filter(task_type='DETECTION')
-detection_templates_ids = [template.model_template_id for template in detection_templates]
-
 
 class TestExportCommonDetection:
     @e2e_pytest_component
@@ -105,14 +102,14 @@ class TestExportCommonDetection:
                 assert error_string in str(ret.stderr)
 
 
-class TestOTECliDemoParamsDetection:
+class TestDemoDetectionTemplate:
     @e2e_pytest_component
     def test_create_venv(self):
-        work_dir, template_work_dir, algo_backend_dir = get_some_vars(detection_templates[0], root)
+        work_dir, template_work_dir, algo_backend_dir = get_some_vars(templates[0], root)
         create_venv(algo_backend_dir, work_dir, template_work_dir)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_export_pp_confidence_threshold_type(self, template):
         error_string = "invalid float value"
         command_args = [template.model_template_id,
@@ -131,7 +128,7 @@ class TestOTECliDemoParamsDetection:
             assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_export_pp_confidence_threshold_oob(self, template):
         error_string = "is out of bounds."
         command_args = [template.model_template_id,
@@ -146,7 +143,7 @@ class TestOTECliDemoParamsDetection:
         assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_export_pp_confidence_threshold_positive_case(self, template):
         command_args = [template.model_template_id,
                         '--load-weights',
@@ -160,7 +157,7 @@ class TestOTECliDemoParamsDetection:
         assert ret.returncode == 0
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_export_pp_result_based_confidence_threshold(self, template):
         error_string = "Boolean value expected"
         command_args = [template.model_template_id,
@@ -175,7 +172,7 @@ class TestOTECliDemoParamsDetection:
         assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_export_pp_result_based_confidence_threshold_positive_case(self, template):
         command_args = [template.model_template_id,
                         '--load-weights',

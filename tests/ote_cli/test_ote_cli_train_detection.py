@@ -50,9 +50,6 @@ ote_dir = os.getcwd()
 templates = Registry('external').filter(task_type='DETECTION').templates
 templates_ids = [template.model_template_id for template in templates]
 
-detection_templates = templates.filter(task_type='DETECTION')
-detection_templates_ids = [template.model_template_id for template in detection_templates]
-
 
 class TestTrainCommonDetection:
     @e2e_pytest_component
@@ -231,14 +228,14 @@ class TestTrainCommonDetection:
         assert error_string in str(ret.stderr)
 
 
-class TestOTECliTrainParamsDetection:
+class TestTrainDetectionTemplate:
     @e2e_pytest_component
     def test_create_venv(self):
-        work_dir, template_work_dir, algo_backend_dir = get_some_vars(detection_templates[0], root)
+        work_dir, template_work_dir, algo_backend_dir = get_some_vars(templates[0], root)
         create_venv(algo_backend_dir, work_dir, template_work_dir)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_batch_size_type(self, template):
         error_string = "invalid int value"
         command_args = [template.model_template_id,
@@ -262,7 +259,7 @@ class TestOTECliTrainParamsDetection:
             assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_batch_size_positive_case(self, template):
         command_args = [template.model_template_id,
                         '--train-ann-file',
@@ -281,7 +278,7 @@ class TestOTECliTrainParamsDetection:
         assert ret.returncode == 0
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_batch_size_oob(self, template):
         error_string = "is out of bounds."
         command_args = [template.model_template_id,
@@ -305,7 +302,7 @@ class TestOTECliTrainParamsDetection:
             assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_learning_rate_type(self, template):
         error_string = "invalid float value"
         command_args = [template.model_template_id,
@@ -329,7 +326,7 @@ class TestOTECliTrainParamsDetection:
             assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_learning_rate_positive_case(self, template):
         command_args = [template.model_template_id,
                         '--train-ann-file',
@@ -348,7 +345,7 @@ class TestOTECliTrainParamsDetection:
         assert ret.returncode == 0
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_learning_rate_oob(self, template):
         error_string = "is out of bounds."
         command_args = [template.model_template_id,
@@ -372,7 +369,7 @@ class TestOTECliTrainParamsDetection:
             assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_lr_warmup_iters_type(self, template):
         error_string = "invalid int value"
         command_args = [template.model_template_id,
@@ -396,7 +393,7 @@ class TestOTECliTrainParamsDetection:
             assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_learning_rate_warmup_iters_positive_case(self, template):
         command_args = [template.model_template_id,
                         '--train-ann-file',
@@ -415,7 +412,7 @@ class TestOTECliTrainParamsDetection:
         assert ret.returncode == 0
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_lr_warmup_iters_oob(self, template):
         error_string = "is out of bounds."
         command_args = [template.model_template_id,
@@ -437,7 +434,7 @@ class TestOTECliTrainParamsDetection:
         assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_num_iters_type(self, template):
         error_string = "invalid int value"
         command_args = [template.model_template_id,
@@ -461,7 +458,7 @@ class TestOTECliTrainParamsDetection:
             assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_num_iters_positive_case(self, template):
         command_args = [template.model_template_id,
                         '--train-ann-file',
@@ -480,7 +477,7 @@ class TestOTECliTrainParamsDetection:
         assert ret.returncode == 0
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_num_iters_oob(self, template):
         error_string = "is out of bounds."
         command_args = [template.model_template_id,
@@ -504,7 +501,7 @@ class TestOTECliTrainParamsDetection:
             assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_pp_confidence_threshold_type(self, template):
         error_string = "invalid float value"
         command_args = [template.model_template_id,
@@ -528,7 +525,7 @@ class TestOTECliTrainParamsDetection:
             assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_confidence_threshold_positive_case(self, template):
         command_args = [template.model_template_id,
                         '--train-ann-file',
@@ -547,7 +544,7 @@ class TestOTECliTrainParamsDetection:
         assert ret.returncode == 0
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_pp_confidence_threshold_oob(self, template):
         error_string = "is out of bounds."
         command_args = [template.model_template_id,
@@ -569,7 +566,7 @@ class TestOTECliTrainParamsDetection:
         assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_pp_result_based_confidence_threshold(self, template):
         error_string = "Boolean value expected"
         command_args = [template.model_template_id,
@@ -590,7 +587,7 @@ class TestOTECliTrainParamsDetection:
         assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_result_based_confidence_threshold_positive_case(self, template):
         command_args = [template.model_template_id,
                         '--train-ann-file',
@@ -610,7 +607,7 @@ class TestOTECliTrainParamsDetection:
         assert ret.returncode == 0
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_nncf_opt_enable_quantization(self, template):
         error_string = "Boolean value expected"
         command_args = [template.model_template_id,
@@ -631,7 +628,7 @@ class TestOTECliTrainParamsDetection:
         assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_result_based_confidence_threshold_positive_case(self, template):
         command_args = [template.model_template_id,
                         '--train-ann-file',
@@ -651,7 +648,7 @@ class TestOTECliTrainParamsDetection:
         assert ret.returncode == 0
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_enable_quantization_positive_case(self, template):
         command_args = [template.model_template_id,
                         '--train-ann-file',
@@ -671,7 +668,7 @@ class TestOTECliTrainParamsDetection:
         assert ret.returncode == 0
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_nncf_opt_enable_pruning(self, template):
         error_string = "Boolean value expected"
         command_args = [template.model_template_id,
@@ -692,7 +689,7 @@ class TestOTECliTrainParamsDetection:
         assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_lp_enable_pruning_positive_case(self, template):
         command_args = [template.model_template_id,
                         '--train-ann-file',
@@ -712,7 +709,7 @@ class TestOTECliTrainParamsDetection:
         assert ret.returncode == 0
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_nncf_opt_maximal_accuracy_degradation_type(self, template):
         error_string = "invalid float value"
         command_args = [template.model_template_id,
@@ -736,7 +733,7 @@ class TestOTECliTrainParamsDetection:
             assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_nncf_opt_maximal_accuracy_degradation_oob(self, template):
         error_string = "is out of bounds"
         command_args = [template.model_template_id,
@@ -756,7 +753,7 @@ class TestOTECliTrainParamsDetection:
         assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_pp_maximal_confidence_threshold_type(self, template):
         error_string = "invalid float value"
         command_args = [template.model_template_id,
@@ -780,7 +777,7 @@ class TestOTECliTrainParamsDetection:
             assert error_string in str(ret.stderr)
 
     @e2e_pytest_component
-    @pytest.mark.parametrize("template", detection_templates, ids=detection_templates_ids)
+    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_ote_train_pp_maximal_confidence_threshold_oob(self, template):
         error_string = "is out of bounds"
         command_args = [template.model_template_id,
