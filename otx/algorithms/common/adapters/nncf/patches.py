@@ -64,3 +64,9 @@ def nncf_trace_wrapper(self, fn, *args, **kwargs):  # pylint: disable=unused-arg
 
     with nncf_trace():
         return fn(*args, **kwargs)
+
+
+def get_hidden_signature_wrapper(fn):
+    def wrapper(*args, **kwargs):
+        return fn(*args, **kwargs)
+    return wrapper

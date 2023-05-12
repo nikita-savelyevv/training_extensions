@@ -111,14 +111,14 @@ class AccuracyAwareRunner(EpochRunnerWithCancel):  # pylint: disable=too-many-in
             self._eval_hook._save_ckpt(self, nncf_runner.best_val_metric_value)
             return self._eval_hook.best_ckpt_path
 
-        try:        # for NNCF 2.5
+        try:        # for NNCF 2.4
+            acc_aware_training_loop = create_accuracy_aware_training_loop(
+                self.nncf_config, self.compression_ctrl, verbose=False
+            )
+        except:     # for NNCF 2.5
             acc_aware_training_loop = create_accuracy_aware_training_loop(
                 self.nncf_config, self.compression_ctrl, verbose=False,
                 uncompressed_model_accuracy=self.validation_fn()
-            )
-        except:     # for NNCF 2.4
-            acc_aware_training_loop = create_accuracy_aware_training_loop(
-                self.nncf_config, self.compression_ctrl, verbose=False
             )
 
         model = acc_aware_training_loop.run(
