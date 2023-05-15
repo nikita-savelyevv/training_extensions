@@ -259,9 +259,9 @@ def wrap_nncf_model(  # noqa: C901
     )
 
     # Hiding signature of the forward method is required for model export to work
-    # model.__class__.forward.__signature__ = inspect.Signature([
-    #     inspect.Parameter('args', inspect.Parameter.VAR_POSITIONAL),
-    #     inspect.Parameter('kwargs', inspect.Parameter.VAR_KEYWORD)])
+    model.__class__.forward.__signature__ = inspect.Signature([
+        inspect.Parameter('args', inspect.Parameter.VAR_POSITIONAL),
+        inspect.Parameter('kwargs', inspect.Parameter.VAR_KEYWORD)])
 
     if resuming_state_dict:
         load_state(model, resuming_state_dict, is_resume=True)
