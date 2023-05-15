@@ -3,12 +3,11 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+import inspect
 import os
-import logging
 from copy import deepcopy
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
-import nncf
 import numpy as np
 import torch
 from mmcv import Config
@@ -18,7 +17,6 @@ from torch.utils.data import DataLoader
 
 from otx.algorithms.common.adapters.mmcv.nncf.runners import NNCF_META_KEY
 from otx.algorithms.common.adapters.mmcv.utils.builder import build_data_parallel
-from otx.algorithms.common.adapters.nncf.patches import get_hidden_signature_wrapper
 from otx.algorithms.common.adapters.nncf.compression import (
     is_checkpoint_nncf,
     is_state_nncf,
@@ -260,11 +258,10 @@ def wrap_nncf_model(  # noqa: C901
         compression_state=compression_state,
     )
 
-    # Supress forward setting warning
-    nncf.set_log_level(logging.ERROR)
-    # Hiding signature of the forward method in required for model export to work
-    model.forward = get_hidden_signature_wrapper(model.forward)
-    nncf.set_log_level(logging.INFO)
+    # Hiding signature of the forward method is required for model export to work
+    # model.__class__.forward.__signature__ = inspect.Signature([
+    #     inspect.Parameter('args', inspect.Parameter.VAR_POSITIONAL),
+    #     inspect.Parameter('kwargs', inspect.Parameter.VAR_KEYWORD)])
 
     if resuming_state_dict:
         load_state(model, resuming_state_dict, is_resume=True)
