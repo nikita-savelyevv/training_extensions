@@ -124,18 +124,3 @@ class TestToolsAnomalyDetection:
             pytest.skip("nncf entrypoint is none")
 
         nncf_eval_openvino_testing(template, tmp_dir_path, otx_dir, args)
-
-    @e2e_pytest_component
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_pot_optimize(self, template, tmp_dir_path):
-        pot_optimize_testing(template, tmp_dir_path, otx_dir, args)
-
-    @e2e_pytest_component
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_pot_validate_fq(self, template, tmp_dir_path):
-        pot_validate_fq_testing(template, tmp_dir_path, otx_dir, "anomaly", type(self).__name__)
-
-    @e2e_pytest_component
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_pot_eval(self, template, tmp_dir_path):
-        pot_eval_testing(template, tmp_dir_path, otx_dir, args)

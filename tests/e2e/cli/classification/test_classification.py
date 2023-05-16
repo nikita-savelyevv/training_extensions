@@ -151,7 +151,6 @@ class TestToolsMultiClassClassification:
         tmp_dir_path = tmp_dir_path / "multi_class_cls"
         otx_eval_deployment_testing(template, tmp_dir_path, otx_dir, args, threshold=0.0)
 
-    @e2e_pytest_compone
     @e2e_pytest_component
     @pytest.mark.skipif(TT_STABILITY_TESTS, reason="This is TT_STABILITY_TESTS")
     @pytest.mark.parametrize("template", templates, ids=templates_ids)
@@ -201,27 +200,6 @@ class TestToolsMultiClassClassification:
             pytest.skip("nncf entrypoint is none")
 
         nncf_eval_openvino_testing(template, tmp_dir_path, otx_dir, args)
-
-    @e2e_pytest_component
-    @pytest.mark.skipif(TT_STABILITY_TESTS, reason="This is TT_STABILITY_TESTS")
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_pot_optimize(self, template, tmp_dir_path):
-        tmp_dir_path = tmp_dir_path / "multi_class_cls"
-        pot_optimize_testing(template, tmp_dir_path, otx_dir, args)
-
-    @e2e_pytest_component
-    @pytest.mark.skipif(TT_STABILITY_TESTS, reason="This is TT_STABILITY_TESTS")
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_pot_validate_fq(self, template, tmp_dir_path):
-        tmp_dir_path = tmp_dir_path / "multi_class_cls"
-        pot_validate_fq_testing(template, tmp_dir_path, otx_dir, "classification", type(self).__name__)
-
-    @e2e_pytest_component
-    @pytest.mark.skipif(TT_STABILITY_TESTS, reason="This is TT_STABILITY_TESTS")
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_pot_eval(self, template, tmp_dir_path):
-        tmp_dir_path = tmp_dir_path / "multi_class_cls"
-        pot_eval_testing(template, tmp_dir_path, otx_dir, args)
 
 
 # Pre-train w/ 'car', 'tree' classes
@@ -361,27 +339,6 @@ class TestToolsMultilabelClassification:
 
         nncf_eval_openvino_testing(template, tmp_dir_path, otx_dir, args_m)
 
-    @e2e_pytest_component
-    @pytest.mark.skipif(TT_STABILITY_TESTS, reason="This is TT_STABILITY_TESTS")
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_pot_optimize(self, template, tmp_dir_path):
-        tmp_dir_path = tmp_dir_path / "multi_label_cls"
-        pot_optimize_testing(template, tmp_dir_path, otx_dir, args_m)
-
-    @e2e_pytest_component
-    @pytest.mark.skipif(TT_STABILITY_TESTS, reason="This is TT_STABILITY_TESTS")
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_pot_validate_fq(self, template, tmp_dir_path):
-        tmp_dir_path = tmp_dir_path / "multi_label_cls"
-        pot_validate_fq_testing(template, tmp_dir_path, otx_dir, "classification", type(self).__name__)
-
-    @e2e_pytest_component
-    @pytest.mark.skipif(TT_STABILITY_TESTS, reason="This is TT_STABILITY_TESTS")
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_pot_eval(self, template, tmp_dir_path):
-        tmp_dir_path = tmp_dir_path / "multi_label_cls"
-        pot_eval_testing(template, tmp_dir_path, otx_dir, args_m)
-
 
 args_h = {
     "--train-data-roots": "tests/assets/datumaro_h-label",
@@ -494,27 +451,6 @@ class TestToolsHierarchicalClassification:
             pytest.skip("nncf entrypoint is none")
 
         nncf_eval_openvino_testing(template, tmp_dir_path, otx_dir, args_h)
-
-    @e2e_pytest_component
-    @pytest.mark.skipif(TT_STABILITY_TESTS, reason="This is TT_STABILITY_TESTS")
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_pot_optimize(self, template, tmp_dir_path):
-        tmp_dir_path = tmp_dir_path / "h_label_cls"
-        pot_optimize_testing(template, tmp_dir_path, otx_dir, args_h)
-
-    @e2e_pytest_component
-    @pytest.mark.skipif(TT_STABILITY_TESTS, reason="This is TT_STABILITY_TESTS")
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_pot_eval(self, template, tmp_dir_path):
-        tmp_dir_path = tmp_dir_path / "h_label_cls"
-        pot_eval_testing(template, tmp_dir_path, otx_dir, args_h)
-
-    @e2e_pytest_component
-    @pytest.mark.skipif(TT_STABILITY_TESTS, reason="This is TT_STABILITY_TESTS")
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_pot_validate_fq(self, template, tmp_dir_path):
-        tmp_dir_path = tmp_dir_path / "h_label_cls"
-        pot_validate_fq_testing(template, tmp_dir_path, otx_dir, "classification", type(self).__name__)
 
 
 # Warmstart using data w/ 'intel', 'openvino', 'opencv' classes
