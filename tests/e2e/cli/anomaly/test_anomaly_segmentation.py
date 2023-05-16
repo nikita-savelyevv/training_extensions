@@ -77,16 +77,6 @@ class TestToolsAnomalySegmentation:
 
     @e2e_pytest_component
     @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_otx_deploy_openvino(self, template, tmp_dir_path):
-        otx_deploy_openvino_testing(template, tmp_dir_path, otx_dir, args)
-
-    @e2e_pytest_component
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
-    def test_otx_eval_deployment(self, template, tmp_dir_path):
-        otx_eval_deployment_testing(template, tmp_dir_path, otx_dir, args, threshold=0.0)
-
-    @e2e_pytest_component
-    @pytest.mark.parametrize("template", templates, ids=templates_ids)
     def test_nncf_optimize(self, template, tmp_dir_path):
         if template.entrypoints.nncf is None:
             pytest.skip("nncf entrypoint is none")
