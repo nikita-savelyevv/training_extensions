@@ -35,8 +35,6 @@
             }
           },
           "ignored_scopes": [
-            "{re}.*cross_resolution_weighting.*__mul__.*",
-            "{re}.*spatial_weighting.*__mul__.*"
           ]
         }
       ],

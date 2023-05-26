@@ -151,6 +151,11 @@ def wrap_nncf_model(  # noqa: C901
             # redefined PTInitializingDataLoader because
             # of DataContainer format in mmdet
             kwargs = {k: v.data[0] if isinstance(v, DataContainer) else v for k, v in dataloader_output.items()}
+            # This is a workaround for SegNeXt, TODO: ticket 112024
+            kwargs["return_loss"] = False
+            kwargs["img"] = [kwargs["img"][0][None]]
+            kwargs["img_metas"] = [[kwargs["img_metas"][0]]]
+            del kwargs["gt_semantic_seg"]
             return (), kwargs
 
     nncf_config = NNCFConfig(config.nncf_config)

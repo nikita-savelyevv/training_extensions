@@ -25,13 +25,14 @@
       "compression": [
         {
           "algorithm": "quantization",
-          "preset": "mixed",
+          "preset": "performance",
+          "overflow_fix": "first_layer_only",
           "initializer": {
             "range": {
-              "num_init_samples": 500
+              "num_init_samples": 300
             },
             "batchnorm_adaptation": {
-              "num_bn_adaptation_samples": 500
+              "num_bn_adaptation_samples": 0
             }
           },
           "ignored_scopes": [
