@@ -24,8 +24,10 @@ from .ir import embed_ir_model_data
 from .utils import (
     UncopiableDefaultDict,
     get_arg_spec,
+    get_default_async_reqs_num,
     get_task_class,
     load_template,
+    read_py_config,
     set_random_seed,
 )
 
@@ -43,4 +45,6 @@ __all__ = [
     "get_image",
     "set_random_seed",
     "OTXOpenVinoDataLoader",
+    "read_py_config",
+    "get_default_async_reqs_num",
 ]
