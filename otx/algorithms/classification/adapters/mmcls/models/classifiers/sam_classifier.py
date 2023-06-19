@@ -144,7 +144,9 @@ class SAMImageClassifier(SAMClassifierMixin, ClsLossDynamicsTrackingMixin, Image
                 val = state_dict.pop(key)
                 if not prefix or key.startswith(prefix):
                     key = key.replace(prefix, "", 1)
-                    if key.startswith("classifier."):
+                    if key.startswith("_nncf."):
+                        pass
+                    elif key.startswith("classifier."):
                         if "4" in key:
                             key = "head." + key.replace("4", "3")
                             if module.multilabel:

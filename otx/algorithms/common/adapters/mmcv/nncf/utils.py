@@ -275,8 +275,19 @@ def wrap_nncf_model(  # noqa: C901
         compression_state=compression_state,
     )
 
+    # from mmcv.runner.checkpoint import get_state_dict
+    # print('\n' * 20)
+    # print("???")
+    # # print('\n'.join(get_state_dict(model).keys()))
+    # print('\n'.join(model.state_dict().keys()))
+    # print('\n' * 20)
+    # exit(0)
+
     if uncompressed_model_accuracy is not None:
-        model.nncf._uncompressed_model_accuracy = uncompressed_model_accuracy
+        try:
+            model.nncf._uncompressed_model_accuracy = uncompressed_model_accuracy
+        except:
+            pass
 
     # Hiding signature of the forward method is required for model export to work
     model.__class__.forward.__signature__ = inspect.Signature(
@@ -287,6 +298,9 @@ def wrap_nncf_model(  # noqa: C901
     )
 
     if resuming_state_dict:
-        load_state(model, resuming_state_dict, is_resume=True)
+        keys_to_ignore = list(filter(lambda s: s.endswith("_level_low") or s.endswith("_level_high"),
+                                     resuming_state_dict.keys()))
+        keys_to_ignore = list(map(lambda s: s.replace("|OUTPUT", "").replace("_nncf.", ""), keys_to_ignore))
+        load_state(model, resuming_state_dict, is_resume=True, keys_to_ignore=keys_to_ignore)
 
     return compression_ctrl, model
